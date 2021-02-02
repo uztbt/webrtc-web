@@ -1,0 +1,12 @@
+@startuml
+
+class "<video>" as VideoTag {
+  autoplay
+}
+
+class MediaStream {
+}
+
+VideoTag *-- MediaStream: srcObject
+
+@enduml
