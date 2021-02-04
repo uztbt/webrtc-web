@@ -1,21 +1,32 @@
 'use strict';
 
-const mediaStreamConstraints = {
-  video: true
+let isInitiator;
+
+window.room = prompt("Enter room name:");
+
+const socket = io.connect();
+
+if (room !== ""){
+  console.log('Message from client: Asking to join room ' + room);
+  socket.emit('create or join', room);
 }
 
-const localVideo = document.querySelector('video');
+socket.on('created', function(room, clientId){
+  isInitiator = true;
+})
 
-let localStream;
+socket.on('full', function(room) {
+  console.log('Message from client: Room ' + room + ' is full :^(');
+})
 
-function gotLocalMediaStream(mediaStream) {
-  localStream = mediaStream;
-  localVideo.srcObject = mediaStream;
-}
+socket.on('ipaddr', function(ipaddr) {
+  console.log('Message from client: Server IP address is ' + ipaddr);
+})
 
-function handleLocalMediaStreamError(error) {
-  console.log('navigator.getUserMedia error: ', error)
-}
+socket.on('joined', function(room, clientId){
+  isInitiator = false;
+})
 
-navigator.mediaDevices.getUserMedia(mediaStreamConstraints)
-.then(gotLocalMediaStream).catch(handleLocalMediaStreamError)
+socket.on('log', function(array){
+  console.log.apply(console, array);
+})
