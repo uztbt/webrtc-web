@@ -2,12 +2,14 @@
 
 let isInitiator;
 
-window.room = prompt("Enter room name:");
+const path = window.location.pathname;
+const pathElems = path.split('/');
+window.room = pathElems.length === 2 ? pathElems[1] : "";
 
 const socket = io.connect();
 
 if (room !== ""){
-  console.log('Message from client: Asking to join room ' + room);
+  console.log(`Message from client: Asking to join room ${room}`);
   socket.emit('create or join', room);
 }
 
@@ -16,11 +18,11 @@ socket.on('created', function(room, clientId){
 })
 
 socket.on('full', function(room) {
-  console.log('Message from client: Room ' + room + ' is full :^(');
+  console.log(`Message from client: Room ${room} is full :^(`);
 })
 
 socket.on('ipaddr', function(ipaddr) {
-  console.log('Message from client: Server IP address is ' + ipaddr);
+  console.log(`Message from client: Server IP address is ${ipaddr}`);
 })
 
 socket.on('joined', function(room, clientId){

@@ -1,4 +1,5 @@
 import * as os from "os";
+import * as path from "path";
 import * as httpModule from "http";
 import * as express from "express";
 import * as socketioModule from "socket.io";
@@ -8,7 +9,14 @@ const app = express();
 const http = new httpModule.Server(app);
 const io = new socketioModule.Server(http);
 
-app.use(express.static("."));
+// Serve static files according to the URL path
+app.use(express.static(path.resolve("public")));
+
+// If there was no file in /public corresponding to the URL path,
+// return the default index.html file
+app.get("/*", (req, res) => {
+  res.sendFile(path.resolve("public/index.html"))
+});
 
 http.listen(port, () => {
   console.log(`Listening on port ${port}`);
