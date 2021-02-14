@@ -1,12 +1,30 @@
 @startuml
 
-class "<video>" as VideoTag {
-  autoplay
-}
+actor Alice
+participant "Web Server" as WebServer
+actor Bob
 
-class MediaStream {
-}
+title "Get in the Same Room of Socket.IO"
 
-VideoTag *-- MediaStream: srcObject
+Alice -> WebServer: Request a web page
+Alice <-- WebServer: web page with socket.IO code
+Alice -> WebServer: 'create or join' abc
+Alice <-- WebServer: 'created'
+Alice -> Alice: getUserMedia()
+Alice -> WebServer: 'got user media'
+WebServer ->o Bob: 'got user media'
+
+Bob -> WebServer: Request a web page
+Bob <-- WebServer: web page with socket.IO code
+Bob -> WebServer: 'create or join' abc
+Bob <-- WebServer: 'joined'
+WebServer -> Alice: 'join'
+Bob -> Bob: getUserMedia()
+Bob -> WebServer: 'got user media'
+WebServer -> Alice: 'got user media'
+
+newpage
+
+title "Create a WebRTC Connection"
 
 @enduml

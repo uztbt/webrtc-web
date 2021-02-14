@@ -10,12 +10,12 @@ const http = new httpModule.Server(app);
 const io = new socketioModule.Server(http);
 
 // Serve static files according to the URL path
-app.use(express.static(path.resolve("public")));
+app.use(express.static(path.resolve("../client/public")));
 
 // If there was no file in /public corresponding to the URL path,
 // return the default index.html file
 app.get("/*", (req, res) => {
-  res.sendFile(path.resolve("public/index.html"))
+  res.sendFile(path.resolve("../client/public/index.html"))
 });
 
 http.listen(port, () => {
